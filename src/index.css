@@ -1,5 +1,7 @@
 body {
+ 
   margin: 0;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -7,7 +9,129 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+
+
+
+
+
+
+
+
+/* Footer */
+a {
+  text-decoration: none !important;
+}
+
+li {
+  list-style-type: none;
+}
+
+li a{
+  color: black !important;
+}
+
+li a:hover{
+  color: rgb(249, 17, 75) !important;
+}
+
+/* Homepage */
+.homepage-text{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+}
+.homepage-image{
+  object-fit: cover;
+  height: 100% !important;
+  width: 100% !important;
+  padding-bottom: 50px !important;
+}
+
+
+/* About */
+.profile-picture{
+  height: 200px !important;
+  /* border-radius: 0px 0px 100px 100px; */
+}
+
+.about-text{
+  text-align: justify;
+}
+
+.sidebar{
+  height: 100vh !important;
+  width: 320px !important;
+  padding-top: 10px;
+  overflow-y: scroll;
+  padding-bottom: 20px !important;
+}
+.main-cotainer{
+  min-height: 100vh;
+  text-align: justify;
+  width: 100% - 230px;
+}
+
+
+/* util */
+.util{
+  margin-top:40px !important;
+}
+
+.btn{
+  border: none !important;
+}
+.btn:focus, .btn:active{
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+
+
+
+@media only screen and (max-width: 768px){
+  .sidebar{
+    width: 300px !important;
+  }
+
+  .main-cotainer{
+    padding:10px;
+  }
+  .homepage-image{
+    object-fit: contain;
+  }
+}
+
+
+@media only screen and (max-width: 480px){
+  .homepage-image{
+    object-fit: contain;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .homepage-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sidebar{
+    /* width: 100% !important; */
+    min-width: 360px !important;
+    max-width: 360px !important;
+    position: fixed;
+    transition: all 0.3s;
+    padding-bottom: 170px !important;
+  }
 }
