@@ -64,7 +64,6 @@ function App() {
         <Route exact path="/user/change-password" element={<ChangePassword changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
         <Route exact path="/user/reset-password" element={<ResetPassword changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
         <Route exact path="/user/reset/password?" element={<SetNewPassword changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
-        {/* admin-side-route */}
         <Route exact path="/admin" element={<AdminLogin />} />
         <Route exact path="admin/dashboard" element={<Dashboard />} />
         <Route exact path="admin/site-settings" element={<Setting />} />
