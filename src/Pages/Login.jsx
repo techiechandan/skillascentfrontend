@@ -37,7 +37,7 @@ const Login = ({ changeLoggedStatue, changeLoggedUser }) => {
   useEffect(() => {
     const auth = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/user/login/api");
+        const response = await axios.get(`${BaseUrl}/user/login/api`);
         if (response.status === 200 && response.data.loggedUser !== "undefined") {
           changeLoggedStatue(true);
           changeLoggedUser(response.data.loggedUser);

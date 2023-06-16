@@ -1,5 +1,5 @@
 import { React, useEffect } from 'react'
-import Button from 'react-bootstrap/esm/Button'
+import Button from 'react-bootstrap/Button'
 import bgImage from '../images/home1.png'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
@@ -52,7 +52,6 @@ const Home = ({ changeLoggedStatue, changeLoggedUser }) => {
           <Button as={Link} to={`/courses`} className="btn btn-danger text-center">Learn more</Button>
         </div>
       </div>
-
       <Contact />
     </div>
   )
