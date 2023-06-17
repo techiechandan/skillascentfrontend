@@ -1,3 +1,3 @@
-const BaseUrl = "https://skillascentbackend.onrender.com"
+const BaseUrl = "https://api.skillascent.in"
 
 export default BaseUrl

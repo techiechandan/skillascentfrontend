@@ -5,7 +5,6 @@ import Alert from 'react-bootstrap/Alert';
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import BaseUrl from '../helper/urlHelper'
-import setCookies from '../helper/setCookies'
 
 const Login = ({ changeLoggedStatue, changeLoggedUser }) => {
   const [email, setEmail] = useState("");
@@ -19,7 +18,6 @@ const Login = ({ changeLoggedStatue, changeLoggedUser }) => {
     try {
       event.preventDefault();
       const response = await axios.post(`${BaseUrl}/user/login/api`, { email, password }, { withCredentials: true });
-      setCookies(response.data.accessToken, response.data.refreshToken);
       if (response.status === 200 && response.data.loggedUser !== "undefined") {
         changeLoggedUser(response.data.loggedUser);
         changeLoggedStatue(true);

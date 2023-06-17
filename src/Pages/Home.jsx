@@ -4,7 +4,6 @@ import bgImage from '../images/home1.png'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import BaseUrl from '../helper/urlHelper'
-import setCookies from '../helper/setCookies'
 // components
 import Contact from '../Components/ContactComp'
 // pages
@@ -24,7 +23,6 @@ const Home = ({ changeLoggedStatue, changeLoggedUser }) => {
         } else {
           changeLoggedStatue(false);
         }
-        setCookies(response.data.accessToken, response.data.refreshToken);
       } catch (error) {
         changeLoggedStatue(false);
       }
