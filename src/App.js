@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, } from 'react-router-dom'
 import axios from 'axios'
 import {useState} from 'react'
 
@@ -73,7 +73,7 @@ function App() {
         <Route exact path="admin/add-content/:courseName" element={<WriteContent />} />
         <Route exact path="admin/view-contents/:courseName" element={<ViewContents />} />
         <Route exact path="admin/update-content/:courseName/:slug" element={<UpdateContent />} />
-        <Redirect to ="/" />
+        <Route path = "/*" element={<Home changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
       </Routes>
       {!currentPath.includes("admin") ? <Footer /> : null}
     </BrowserRouter>
