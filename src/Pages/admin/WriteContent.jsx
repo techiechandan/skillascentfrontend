@@ -50,7 +50,7 @@ const WriteContent = () => {
     const SubmitHandler = async(event)=>{
         try {
             event.preventDefault();
-            const response = await axios.post(`http://localhost:4000/admin/add-content/${params.courseName}`,{topic,contents});
+            const response = await axios.post(`${BaseUrl}/admin/add-content/${params.courseName}`,{topic,contents});
             if(response.status === 200){
                 setMessageStack(response.data.message);
                 setIsMessage(true);
@@ -61,7 +61,6 @@ const WriteContent = () => {
                 setMessageStack(error.response.data.message);
                 setIsMessage(true);
             }else{
-                console.log(error);
                 navigate('/admin');
             }
         }

@@ -101,14 +101,13 @@ const CourseList = () => {
     }
 
     // Edit and Update Course Details
-    const editCourse = async (courseId) => {
+    const editCourse = async (CourseId) => {
         setModalStatus(true);
         setEditMode(true);
         setIsDataLoaded(false);
         try {
-            setCourseId(courseId);
-            const response = await axios.get(`${BaseUrl}/admin/update/course-details/${courseId}`);
-            console.log(response.data.courseDetails);
+            setCourseId(CourseId);
+            const response = await axios.get(`${BaseUrl}/admin/update/course-details/${CourseId}`);
             if (response.status === 200 && (response.data.courseDetails !== undefined)) {
                 setThumbnail(response.data.courseDetails.thumbnail)
                 setTitle(response.data.courseDetails.title);
@@ -138,7 +137,6 @@ const CourseList = () => {
             const data = { thumbnail: thumbnail, title: title, description: description, islive: selectedOption.value }
             const response = await axios.post(`${BaseUrl}/admin/update/course-details/${courseId}`, data);
             if (response.status === 200) {
-                console.log(response);
                 setMessageStack(response.data.message);
                 setIsMessage(true);
             }

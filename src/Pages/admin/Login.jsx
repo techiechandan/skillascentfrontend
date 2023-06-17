@@ -15,7 +15,6 @@ const Login = () => {
   const submitHandler = async(event) => {
     try {
       event.preventDefault();
-      console.log(`Email:${email} and Password:${password}`);
       const response = await axios.post(`${BaseUrl}/admin/login/api`,{email,password});
       if(response && response.status === 200) navigate("/admin/dashboard");
     } catch (error) {
@@ -27,7 +26,7 @@ const Login = () => {
   useEffect(() => {
     const Auth = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/admin/auth/api");
+        const response = await axios.get(`${BaseUrl}/admin/auth/api`);
         if (response && response.status === 200) {
           navigate("/admin/dashboard");
         }
