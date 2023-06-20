@@ -3,7 +3,7 @@ import axios from 'axios';
 import BaseUrl from '../helper/urlHelper'
 
 
-const Privacy_Policy = ({changeLoggedStatue, changeLoggedUser}) => {
+const PrivacyPolicy = ({changeLoggedStatue, changeLoggedUser}) => {
   const [privacyPolicy, setprivacyPolicy] = useState(null);
 
     useEffect(()=>{
@@ -39,4 +39,4 @@ const Privacy_Policy = ({changeLoggedStatue, changeLoggedUser}) => {
   )
 }
 
-export default Privacy_Policy
+export default PrivacyPolicy;

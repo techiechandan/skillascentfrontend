@@ -35,9 +35,9 @@ const Home = ({ changeLoggedStatue, changeLoggedUser }) => {
     <div className="container-fluid util pt-md-2 m-0 p-0 mt-md-3" >
       <div className="container-fluid row p-0 m-0 mt-md-3">
         <div className="col-12 col-md-5 order-md-1 order-2 homepage-text py-md-5 py-0">
-          <span className="fs-1 fw-bolder text-primary">Skill Accent!</span>
-          <span className="fs-4 fw-bolder text-center">"Start leargin today,for better tomorrow!"</span>
-          <button className="btn btn-danger my-5 fw-bolder ">Start learing</button>
+          <span className="fs-1 fw-bolder text-primary">Skill Ascent!</span>
+          <span className="fs-4 fw-bolder text-center">"Start learning today,for better tomorrow!"</span>
+          <button className="btn btn-danger my-5 fw-bolder" as ={Link} to="/courses">Start learning</button>
         </div>
         <div className="col-12 order-1 order-md-2 col-md-7 py-md-0 py-5 mt-5">
           <img src={bgImage} className="homepage-image py-md-2" alt="not found" />

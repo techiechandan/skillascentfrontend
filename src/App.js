@@ -1,34 +1,60 @@
 import { BrowserRouter, Routes, Route, } from 'react-router-dom'
 import axios from 'axios'
-import {useState} from 'react'
+import {useState, lazy, Suspense} from 'react'
 
 // Components
 import Header from './Components/Header'
 import Footer from './Components/Footer'
 import Content from './Components/Content'
 // pages
-import Home from './Pages/Home'
-import About from './Pages/About'
-import Contact from './Pages/Contact'
-import Coureses from './Pages/CourseList'
-import Disclamer from './Pages/Disclamer'
-import PrivacyPolicy from './Pages/Privacy_Policy'
-import Login from './Pages/Login'
-import Register from './Pages/Register'
-import Learn from './Pages/Learn'
-import ResetPassword from './Pages/ResetPassword'
-import ChangePassword from './Pages/ChangePassword'
-import SetNewPassword from './Pages/SetNewPassword'
+const Home = lazy(()=>import('./Pages/Home'));
+const About = lazy(()=>import('./Pages/About'));
+const Contact = lazy(()=>import('./Pages/Contact'));
+const Coureses = lazy(()=>import('./Pages/CourseList'));
+const Disclamer = lazy(()=>import('./Pages/Disclamer'));
+const PrivacyPolicy = lazy(()=>import('.Pages/PrivacyPolicy'));
+const Login = lazy(()=>import('./Pages/Login'));
+const Register = lazy(()=>import('./Pages/Register'));
+const Learn = lazy(()=>import('./Pages/Learn'));
+const ResetPassword = lazy(()=>import('./Pages/ResetPassword'));
+const ChangePassword = lazy(()=>import('./Pages/ChangePassword'));
+const SetNewPassword = lazy(()=>import('./Pages/SetNewPassword'));
+// Admin Pages
+const AdminLogin = lazy(()=>import('./Pages/admin/Login'));
+const Dashboard = lazy(()=>import('./Pages/admin/Dashboard'));
+const Users = lazy(()=>import('./Pages/admin/Users'));
+const CoureseList = lazy(()=>import('./Pages/admin/CourseList'));
+const WriteContent = lazy(()=>import('./Pages/admin/WriteContent'));
+const ViewContents = lazy(()=>import('./Pages/admin/ViewContents'));
+const UpdateContent = lazy(()=>import('./Pages/admin/UpdateContent'));
+const Query = lazy(()=>import('./Pages/admin/Query'));
+const Setting = lazy(()=>import('./Pages/admin/Setting'))
+
+
+// import Home from './Pages/Home'
+// import About from './Pages/About'
+// import Contact from './Pages/Contact'
+// import Coureses from './Pages/CourseList'
+// import Disclamer from './Pages/Disclamer'
+// import PrivacyPolicy from './Pages/Privacy_Policy'
+// import Login from './Pages/Login'
+// import Register from './Pages/Register'
+// import Learn from './Pages/Learn'
+// import ResetPassword from './Pages/ResetPassword'
+// import ChangePassword from './Pages/ChangePassword'
+// import SetNewPassword from './Pages/SetNewPassword'
+
+
 // admin side pages
-import AdminLogin from './Pages/admin/Login'
-import Dashboard from './Pages/admin/Dashboard'
-import Users from './Pages/admin/Users'
-import CoureseList from './Pages/admin/CourseList'
-import WriteContent from './Pages/admin/WriteContent'
-import ViewContents from './Pages/admin/ViewContents'
-import UpdateContent from './Pages/admin/UpdateContent'
-import Query from './Pages/admin/Query'
-import Setting from './Pages/admin/Setting'
+// import AdminLogin from './Pages/admin/Login'
+// import Dashboard from './Pages/admin/Dashboard'
+// import Users from './Pages/admin/Users'
+// import CoureseList from './Pages/admin/CourseList'
+// import WriteContent from './Pages/admin/WriteContent'
+// import ViewContents from './Pages/admin/ViewContents'
+// import UpdateContent from './Pages/admin/UpdateContent'
+// import Query from './Pages/admin/Query'
+// import Setting from './Pages/admin/Setting'
 
 const currentPath = window.location.pathname;
 
@@ -49,13 +75,14 @@ function App() {
   return (
     <BrowserRouter>
       {!currentPath.includes("admin") && <Header LoggedStatus = {LoggedStatus} LoggedUser = {LoggedUser} changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />}
+      <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route exact path="/" element={<Home changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
         <Route exact path="/about" element={<About changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser}/>} />
         <Route exact path="/contact" element={<Contact changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
         <Route exact path="/courses" element={<Coureses changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
         <Route exact path="/disclamer" element={<Disclamer changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
-        <Route exact path="/privacy-policy" element={<PrivacyPolicy changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
+        {/* <Route exact path="/privacy-policy" element={<Privacy_Policy changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} /> */}
         <Route exact path="/user/login" element={<Login changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
         <Route exact path="/user/register" element={<Register changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
         <Route exact path="/learn/:courseName" element={<Learn changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />}>
@@ -75,6 +102,7 @@ function App() {
         <Route exact path="admin/update-content/:courseName/:slug" element={<UpdateContent />} />
         <Route path = "/*" element={<Home changeLoggedStatue = {changeLoggedStatue} changeLoggedUser = {changeLoggedUser} />} />
       </Routes>
+      </Suspense>
       {!currentPath.includes("admin") ? <Footer /> : null}
     </BrowserRouter>
   );
