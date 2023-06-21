@@ -73,16 +73,16 @@ const WriteContent = () => {
 
 
     return (
-        <div className="d-flex p-0">
+        <div className="d-flex p-0" style={{minHeight:"100vh"}}>
             <Sidebar openState={openState} setOpenState={setOpenState} />
-            <div className="container-fluid m-0 px-0 " style={{ backgroundColor: '#ececec' }}>
-                <div className="container-fluid d-flex py-2 align-items-center">
-                    <Button className="p-2 pt-0 me-2 fs-4 bg-transparent text-danger border-0 " onClick={() => { setOpenState(!openState) }}>
+            <div className=" m-0 px-0 " style={{ backgroundColor: '#ececec',width:"100%"}}>
+                <div className="container-fluid d-flex pt-2 align-items-center sticky-top bg-light">
+                    <Button className="p-3 pt-0 me-2 fs-4 bg-transparent text-danger border-0 " onClick={() => { setOpenState(!openState) }}>
                         <FaAlignJustify />
                     </Button>
                     <h5>Add-Content!</h5>
                 </div>
-                <div className="container-fluid m-0 p-0 px-md-5 px-2">
+                <div className="container-fluid m-0 p-0 my-3 px-md-5 px-2">
                     <Form className="border border-1 p-md-4 p-2 bg-light" onSubmit={SubmitHandler}>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label className="fw-bold">Title / Topic</Form.Label>

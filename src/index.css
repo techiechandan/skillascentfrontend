@@ -67,13 +67,13 @@ li a:hover{
   text-align: justify;
 }
 
-.sidebar{
+/* .sidebar{
   height: 100vh !important;
   width: 320px !important;
   padding-top: 10px;
   overflow-y: scroll;
   padding-bottom: 20px !important;
-}
+} */
 .main-cotainer{
   min-height: 100vh;
   text-align: justify;
@@ -99,9 +99,9 @@ li a:hover{
 
 
 @media only screen and (max-width: 768px){
-  .sidebar{
+  /* .sidebar{
     width: 300px !important;
-  }
+  } */
 
   .main-cotainer{
     padding:10px;
@@ -126,12 +126,11 @@ li a:hover{
     align-items: center;
   }
 
-  .sidebar{
-    /* width: 100% !important; */
+  /* .sidebar{
     min-width: 360px !important;
     max-width: 360px !important;
     position: fixed;
     transition: all 0.3s;
     padding-bottom: 170px !important;
-  }
+  } */
 }

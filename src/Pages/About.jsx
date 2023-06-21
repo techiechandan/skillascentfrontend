@@ -1,30 +1,31 @@
-import { React, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { React, useEffect, useContext } from 'react'
 import axios from 'axios'
 import BaseUrl from '../helper/urlHelper'
-
+import AuthContext from '../context/AuthContex'
 import AboutComp from '../Components/AboutComp'
 
-const About = ({ changeLoggedStatue,changeLoggedUser }) => {
-  const navigate = useNavigate();
+const About = () => {
+  const context = useContext(AuthContext);
   useEffect(() => {
     const auth = async () => {
       try {
         const response = await axios.get(`${BaseUrl}/about/api`);
         if (response.status === 200 && (response.data.loggedUser !== "undefined")) {
-          changeLoggedStatue(true);
-          changeLoggedUser(response.data.loggedUser);
-        }else{
-          changeLoggedStatue(false);
+          context.setLoggedStatus(true);
+          context.setLoggedUser(response.data.loggedUser);
+        } else {
+          context.setLoggedStatus(false);
         }
       } catch (error) {
         if (error) {
-          changeLoggedStatue(false);
+          context.setLoggedStatus(false);
         }
       }
     }
     auth();
-  }, [navigate, changeLoggedStatue, changeLoggedUser]);
+    window.scrollTo(0,0);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className="mt-5">

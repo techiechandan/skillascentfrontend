@@ -44,8 +44,8 @@ const Sidebar = ({ openState,setOpenState }) => {
 
 
   return (
-    <div className={CurrentWidth < 768?"vh-100 bg-light ps-3 position-fixed start-0 bg-light":"vh-100 ps-3 bg-light"} style={openState ? {width:'300px',zIndex:"100000"}  : CurrentWidth < 768 ?{ marginLeft: '-70px',transition: "0.3s" }:{width:"90px",transition: "0.3s"}}>
-      <div className="ps-3 pt-2 mb-0 wrap-element d-flex align-items-center">
+    <div className={CurrentWidth < 768?"vh-100 bg-light ps-3 position-fixed start-0 bg-light":"vh-100 ps-3 bg-light sticky-top"} style={openState ? {width:'400px',zIndex:"100000"}  : CurrentWidth < 768 ?{ marginLeft: '-70px',transition: "0.3s" }:{width:"90px",transition: "0.3s"}}>
+      <div className="ps-3 pt-2 mb-0 wrap-element d-flex align-items-center ">
         <span className="fs-3 mb-1 text-primary me-2"><FaEllo /></span>
         <span className="fs-3 fw-bold text-primary me-auto" style={openState ? { display: 'block' } : { display: 'none' }}>Skill Ascent</span>
         {openState&& CurrentWidth < 768 &&
@@ -54,7 +54,7 @@ const Sidebar = ({ openState,setOpenState }) => {
         </Button>
         }
       </div>
-      <hr className="m-0 p-0 wrap-element"></hr>
+      {/* <hr className="m-0 mt-2 p-0 wrap-element"></hr> */}
 
       <ul className="p-0" >
         {

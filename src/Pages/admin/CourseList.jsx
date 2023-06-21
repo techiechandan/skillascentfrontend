@@ -8,7 +8,7 @@ import Alert from 'react-bootstrap/Alert';
 import Image from 'react-bootstrap/Image';
 import Spinner from 'react-bootstrap/Spinner';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Select from 'react-select';
 // icons
 import { FaAlignJustify } from 'react-icons/fa'
@@ -23,7 +23,6 @@ const options = [
 
 
 const CourseList = () => {
-    const navigate = useNavigate();
     const [openState, setOpenState] = useState(true);
     const [modalStatus, setModalStatus] = useState(false);
     const [courses, setCourses] = useState([]);
@@ -56,7 +55,7 @@ const CourseList = () => {
     // file upload
     const handleFileUpload = async (event) => {
         event.preventDefault();
-        if(event.target.files[0]){
+        if (event.target.files[0]) {
             const Base64Image = await ConvertToBase64(event.target.files[0]);
             setThumbnail(Base64Image);
         }
@@ -66,7 +65,7 @@ const CourseList = () => {
     const handelSubmit = async (event) => {
         try {
             event.preventDefault();
-            const response = await axios.post(`${BaseUrl}/admin/add-course/api`, { title: title, description: description, thumbnail: thumbnail,islive:selectedOption.value});
+            const response = await axios.post(`${BaseUrl}/admin/add-course/api`, { title: title, description: description, thumbnail: thumbnail, islive: selectedOption.value });
             if (response.status === 200) {
                 setMessageStack(response.data.message);
                 setIsMessage(true);
@@ -78,15 +77,17 @@ const CourseList = () => {
         }
     }
 
+    const [isLoaded, setIsLoaded] = useState(false);
     const courseList = useCallback(async () => {
         try {
             const response = await axios.get(`${BaseUrl}/admin/courese-list/api`);
             setCourses([...response.data.courseList]);
+            setIsLoaded(true);
         } catch (error) {
-            console.log(error);
-            navigate('/admin');
+            alert(error.response.data.message);
         }
-    }, [navigate])
+        // eslint-disable-next-line
+    }, []);
 
 
     const deleteCourse = async (courseId) => {
@@ -149,77 +150,87 @@ const CourseList = () => {
 
     useEffect(() => {
         courseList();
-    }, [navigate, courseList]);
+    }, [courseList]);
 
     return (
         <div className="d-flex p-0">
             <Sidebar openState={openState} setOpenState={setOpenState} />
-            <div className="container-fluid m-0 px-0 " style={{ backgroundColor: '#ececec' }}>
-                <div className="container-fluid d-flex pt-2  align-items-center">
+            <div className="container-fluid m-0 px-0 " style={{ backgroundColor: '#ececec', width:"100%" }}>
+                <div className="container-fluid d-flex pt-2  align-items-center sticky-top bg-light">
                     <Button className="p-2 pt-0 me-2 fs-4 bg-transparent text-danger border-0 " onClick={() => { setOpenState(!openState) }}>
                         <FaAlignJustify />
                     </Button>
                     <h5>Course List</h5>
                 </div>
-                <div className="container-fluid p-md-4 pt-2">
+                <div className="container-fluid p-md-4 pt-2 my-3">
                     <div className="d-flex justify-content-between mb-2">
                         <Button onClick={() => setModalStatus(true)} variant="success">Add Course</Button>
                         <Button onClick={() => setChangeView(!changeView)} variant="danger">Change View</Button>
                     </div>
 
-                    {changeView ?
-                        <Table responsive striped bordered hover variant="success">
-                            <thead>
-                                <tr>
-                                    {/* <th className="text-center">Mark</th> */}
-                                    <th className="text-center">SN</th>
-                                    <th className="text-center">ID</th>
-                                    <th className="text-center">Title</th>
-                                    <th className="text-center">Status</th>
-                                    <th className="text-center">Description</th>
-                                    <th className="text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {courses.length > 0 &&
-                                    courses.map((item, index) => (
-                                        <tr key={index}>
-                                            {/* <td className="text-center"><Form.Check /></td> */}
-                                            <td className="text-center">{index + 1}</td>
-                                            <td className="text-center">{item._id}</td>
-                                            <td className="text-center">{item.title}</td>
-                                            <td className="text-center">{item.islive?"Public":"Private"}</td>
-                                            <td className="text-center">{item.description}</td>
-                                            <td className="text-center">
-                                                <Button variant="success me-md-2 mb-md-0 mb-1" onClick={() => { editCourse(item._id) }} >Edit</Button>
-                                                <Button variant="danger" onClick={() => { deleteCourse(item._id) }} >Delete</Button>
-                                            </td>
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </Table>
-                        :
-                        <div className="container-fluid m-0 p-0">
-                            <div className="container-fluid row justify-content-start align-items-center pb-4 m-0">
-                                {
-                                    courses.length > 0 &&
-                                    courses.map((item, index) => (
-                                        <div className="col-md-3 col-12 pb-md-0 pb-2 mb-md-2" key={index}>
-                                            <Card >
-                                                <Card.Img variant="top" src={item.thumbnail} style={{ height: "10rem" }} />
-                                                <Card.Body className="">
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                    <Card.Text style={{ height: "3rem" }}>{item.description}</Card.Text>
-                                                    <div className="text-center">
-                                                        <Button as={Link} to={"/admin/add-content/" + item.title} variant="primary">Add Content</Button>
+                    {isLoaded ?
+                        <>
+                            {
+                                changeView ?
+                                    <Table responsive striped bordered hover variant="success">
+                                        <thead>
+                                            <tr>
+                                                {/* <th className="text-center">Mark</th> */}
+                                                <th className="text-center">SN</th>
+                                                <th className="text-center">ID</th>
+                                                <th className="text-center">Title</th>
+                                                <th className="text-center">Status</th>
+                                                <th className="text-center">Description</th>
+                                                <th className="text-center">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {courses.length > 0 &&
+                                                courses.map((item, index) => (
+                                                    <tr key={index}>
+                                                        {/* <td className="text-center"><Form.Check /></td> */}
+                                                        <td className="text-center">{index + 1}</td>
+                                                        <td className="text-center">{item._id}</td>
+                                                        <td className="text-center">{item.title}</td>
+                                                        <td className="text-center">{item.islive ? "Public" : "Private"}</td>
+                                                        <td className="text-center">{item.description}</td>
+                                                        <td className="text-center">
+                                                            <Button variant="success me-md-2 mb-md-0 mb-1" onClick={() => { editCourse(item._id) }} >Edit</Button>
+                                                            <Button variant="danger" onClick={() => { deleteCourse(item._id) }} >Delete</Button>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+                                    </Table>
+                                    :
+                                    <div className="container-fluid m-0 p-0">
+                                        <div className="container-fluid row justify-content-center align-items-center pb-4 m-0">
+                                            {
+                                                courses.length > 0 &&
+                                                courses.map((item, index) => (
+                                                    <div className="col-md-3 col-12 pb-md-0 pb-2 mb-md-2" key={index}>
+                                                        <Card >
+                                                            <Card.Img variant="top" src={item.thumbnail} />
+                                                            <Card.Body className="d-flex flex-column">
+                                                                <Card.Title>{item.title}</Card.Title>
+                                                                <Card.Text >{item.description}</Card.Text>
+                                                                <div className="text-center mt-auto">
+                                                                    <Button as={Link} to={"/admin/add-content/" + item.title} variant="primary">Add Content</Button>
+                                                                </div>
+                                                            </Card.Body>
+                                                        </Card>
                                                     </div>
-                                                </Card.Body>
-                                            </Card>
+                                                ))
+                                            }
                                         </div>
-                                    ))
-                                }
-                            </div>
+                                    </div>
+                            }
+                        </>
+                        :
+                        <div className="d-flex flex-column pt-5 justify-content-center align-items-center">
+                            <Spinner animation="border" variant="primary" />
+                            <p className="fw-bold fs-5">Please wait...</p>
                         </div>
                     }
 
@@ -231,10 +242,12 @@ const CourseList = () => {
                             </Modal.Title>
                         </Modal.Header>
 
-                        {!isDataLoaded && editMode  ?
+                        {!isDataLoaded && editMode ?
                             <>
-                                <Spinner animation="border" variant="primary" />
-                                <p className="">Please wait...</p>
+                                <div className="d-flex flex-column pt-5 justify-content-center align-items-center">
+                                    <Spinner animation="border" variant="primary" />
+                                    <p className="fw-bold fs-5">Please wait...</p>
+                                </div>
                             </>
                             :
                             <Modal.Body>
@@ -277,7 +290,7 @@ const CourseList = () => {
                                 :
                                 <Button type="submit" disabled={description.length > 150} variant="success" onClick={(event) => { handelSubmit(event) }}>Add</Button>
                             }
-                            <Button variant="danger" onClick={() => { setModalStatus(false);clearData() }}>Close</Button>
+                            <Button variant="danger" onClick={() => { setModalStatus(false); clearData() }}>Close</Button>
                         </Modal.Footer>
                     </Modal>
                 </div>

@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import Spinner from 'react-bootstrap/Spinner';
 import Select from 'react-select'
 import axios from 'axios'
 import { State, City } from 'country-state-city'
@@ -18,14 +19,15 @@ import Sidebar from '../../Components/admin/Sidebar'
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [modalStatus, setModalStatus] = useState(false);
-
+  const [isLoaded, setIsLoaded] = useState(false);
   // getting users list from db
   const getUsers = async () => {
     try {
       const response = await axios.get(`${BaseUrl}/admin/users/api`);
       setUsers([...response.data.usersList]);
+      setIsLoaded(true);
     } catch (error) {
-      console.log(error);
+      setIsLoaded(true);
     }
   }
 
@@ -61,14 +63,16 @@ const Users = () => {
       return { value: item.name, label: item.name }
     }));
 
+    setId(users[index]._id);
     setName(users[index].name);
     setEmail(users[index].email);
     setCourse(users[index].course);
     setState(users[index].state);
     setCity(users[index].city);
-    setRoles(users[index].roles);
+    setRoles([users[index].roles[0],users[index].roles[1],users[index].roles[2]]);
   }
 
+  const [id,setId] = useState("")
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [course, setCourse] = useState("");
@@ -76,62 +80,92 @@ const Users = () => {
   const [city, setCity] = useState("");
   const [roles, setRoles] = useState([]);
 
-  const updateHandler = () => {
+  // updating uer's details
+  const updateHandler = async() => {
     try {
-      alert(`Name${name},Email:${email},Course:${course},State:${state},City:${city}`)
+      const response = await axios.post(`${BaseUrl}/admin/update/users/deatils/api`,{id,name,email,course,state,city,roles});
+      if(response.status === 200){
+        alert(response.data.message);
+      }
     } catch (error) {
       console.log(error);
+      alert(error.response.data.message);
     }
   }
+
+  // deleting user's
+  const deleteUser = async(userId)=>{
+    try{
+      const response = await axios.delete(`${BaseUrl}/admin/user/delete/${userId}/api`);
+      if(response.status === 200){
+        alert(response.data.message);
+      }
+    }catch(error){
+      alert(error.response.data.message);
+    }
+  }
+
 
 
   useEffect(() => {
     setStateList(State.getStatesOfCountry("IN"));
     getUsers();
+    // eslint-disable-next-line
   }, []);
 
 
   const [openState, setOpenState] = useState(true);
+
   return (
     <div className="d-flex p-0">
       <Sidebar openState={openState} setOpenState={setOpenState} />
-      <div className="container-fluid vh-100 m-0 px-0 " style={{ backgroundColor: '#ececec' }}>
-        <div className="container-fluid d-flex py-2 align-items-center">
+      <div className="container-fluid vh-100 m-0 px-0 " style={{ backgroundColor: '#ececec',width:"100%" }}>
+        <div className="container-fluid d-flex py-2 align-items-center sticky-top bg-light">
           <Button className="p-2 pt-0 me-2 fs-4 bg-transparent text-danger border-0 " onClick={() => { setOpenState(!openState) }}>
             <FaAlignJustify />
           </Button>
           <h5>Users</h5>
         </div>
-        <div className=" p-4 pt-2">
-          <Table responsive striped bordered hover variant='success'>
-            <thead>
-              <tr>
-                <th className="text-center">SN</th>
-                <th className="text-center">ID</th>
-                <th className="text-center">Name</th>
-                <th className="text-center">Email</th>
-                <th className="text-center">Role</th>
-                <th className="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.length > 0 &&
-                users.map((item, index) => (
-                  <tr key={index}>
-                    <td className="text-center">{index + 1}</td>
-                    <td className="text-center">{item._id}</td>
-                    <td className="text-center">{item.name}</td>
-                    <td className="text-center">{item.email}</td>
-                    <td className="text-center">{item.roles.includes("super_admin")?"Super Admin":item.roles.includes("admin")?"Admin":"User"}</td>
-                    <td className="text-center">
-                      <Button variant="success me-md-2 mb-md-0 mb-1" onClick={() => { setModalStatus(!modalStatus); getEdituser(index) }}>Edit</Button>
-                      <Button variant="danger">Delete</Button>
-                    </td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </Table>
+        <div className=" p-4 pt-2 my-3">
+
+          {isLoaded ?
+            <Table responsive striped bordered hover variant='success'>
+              <thead>
+                <tr>
+                  <th className="text-center">SN</th>
+                  <th className="text-center">ID</th>
+                  <th className="text-center">Name</th>
+                  <th className="text-center">Email</th>
+                  <th className="text-center">Role</th>
+                  <th className="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  users.length > 0 &&
+                  users.map((item, index) => (
+                    <tr key={index}>
+                      <td className="text-center">{index + 1}</td>
+                      <td className="text-center">{item._id}</td>
+                      <td className="text-center">{item.name}</td>
+                      <td className="text-center">{item.email}</td>
+                      <td className="text-center">{item.roles.includes("super_admin") ? "Super Admin" : item.roles.includes("admin") ? "Admin" : "User"}</td>
+                      <td className="text-center">
+                        <Button variant="success me-md-2 mb-md-0 mb-1" onClick={() => { setModalStatus(!modalStatus); getEdituser(index) }}>Edit</Button>
+                        <Button variant="danger" onClick={()=>{deleteUser(item._id)}}>Delete</Button>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </Table>
+            :
+            <div className="d-flex flex-column pt-5 justify-content-center align-items-center">
+              <Spinner animation="border" variant="primary" />
+              <p className="fw-bold fs-5">Please wait...</p>
+            </div>
+          }
+
 
           {/* Modal */}
 
@@ -203,8 +237,8 @@ const Users = () => {
                       <Select
                         value={RolesList.value}
                         options={RolesList}
-                        defaultValue={{ value: roles, label: roles }}
-                        onChange={(option) => { setRoles(option.value) }}
+                        defaultValue={{ value:roles.includes("super_admin") ? "Super Admin" :roles.includes("admin") ? "Admin" : "User", label: roles.includes("super_admin") ? "Super Admin" :roles.includes("admin") ? "Admin" : "User" }}
+                        onChange={(option) => { setRoles([option.value]) }}
                       />
                     </div>
                   </div>

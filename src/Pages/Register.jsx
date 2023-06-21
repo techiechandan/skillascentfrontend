@@ -1,4 +1,4 @@
-import React, { useState, useEffect, } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
@@ -6,10 +6,10 @@ import { Link,useNavigate } from 'react-router-dom'
 import { State, City } from 'country-state-city'
 import axios from 'axios'
 import BaseUrl from '../helper/urlHelper'
-
+import AuthContext from '../context/AuthContex';
 
 const Register = ({changeLoggedStatue}) => {
-
+  const context = useContext(AuthContext);
   const [StateList, setStateList] = useState([]);
   const [CityList, setCityList] = useState([]);
 
@@ -68,16 +68,18 @@ const Register = ({changeLoggedStatue}) => {
       try {
         const response = await axios.get(`BaseUrl/user/auth/api`);
         if(response.status === 200){
-          changeLoggedStatue(true);
+          context.setLoggedStatus(true);
           navigate('/');
         }
       } catch (error) {
-        changeLoggedStatue(false);
+        context.setLoggedStatus(false);
       }
     }
     auth();
-  }, [navigate,changeLoggedStatue]);
+    // eslint-disable-next-line
+  }, []);
 
+  
   return (
     <div className="container-fluid m-0 pt-3 my-5 d-flex flex-column justify-content-center align-items-center">
       {messageStack &&

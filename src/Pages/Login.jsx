@@ -1,12 +1,14 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect, useContext } from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import BaseUrl from '../helper/urlHelper'
+import AuthContext from '../context/AuthContex';
 
-const Login = ({ changeLoggedStatue, changeLoggedUser }) => {
+const Login = () => {
+  const context = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,39 +21,42 @@ const Login = ({ changeLoggedStatue, changeLoggedUser }) => {
       event.preventDefault();
       const response = await axios.post(`${BaseUrl}/user/login/api`, { email, password }, { withCredentials: true });
       if (response.status === 200 && response.data.loggedUser !== "undefined") {
-        changeLoggedUser(response.data.loggedUser);
-        changeLoggedStatue(true);
+        context.setLoggedUser(response.data.loggedUser);
+        context.setLoggedStatus(true);
         navigate("/");
       }else{
-        changeLoggedUser(null);
-        changeLoggedStatue(false);
+        context.setLoggedUser(null);
+        context.setLoggedStatus(false);
       }
     } catch (error) {
       setMessageStack(error.response.data.message);
     }
   }
 
-
+ 
 
   useEffect(() => {
     const auth = async () => {
       try {
         const response = await axios.get(`${BaseUrl}/user/login/api`);
         if (response.status === 200 && response.data.loggedUser !== "undefined") {
-          changeLoggedStatue(true);
-          changeLoggedUser(response.data.loggedUser);
+          context.setLoggedStatus(true);
+          context.setLoggedUser(response.data.loggedUser);
           navigate('/');
         } else {
-          changeLoggedStatue(false);
-          changeLoggedUser(null);
+          context.setLoggedStatus(false);
+          context.setLoggedUser(null);
         }
       } catch (error) {
-        changeLoggedStatue(false);
-        changeLoggedUser(null);
+        context.setLoggedStatus(false);
+        context.setLoggedUser(null);
       }
     }
     auth();
-  }, [navigate, changeLoggedStatue, changeLoggedUser]);
+    window.scrollTo(0,0);
+    // eslint-disable-next-line
+  }, []);
+
 
   return (
     <div className="container-fluid m-0 pt-3 vh-100 d-flex flex-column justify-content-center align-items-center">

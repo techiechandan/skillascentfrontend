@@ -1,4 +1,4 @@
-import React from 'react'
+import {React,useContext} from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -9,17 +9,19 @@ import { Link,useNavigate } from 'react-router-dom'
 import { FaUserCircle } from 'react-icons/fa'
 import axios from 'axios'
 import BaseUrl from '../helper/urlHelper'
+import AuthContext from '../context/AuthContex';
 
 
-const Header = ({ LoggedStatus, LoggedUser, changeLoggedStatue, changeLoggedUser }) => {
+const Header = () => {
   const navigate = useNavigate();
+  const context = useContext(AuthContext);
 
   const LogOut = async() => {
     try {
       const response = await axios.get(`${BaseUrl}/user/logout/api`);
       if(response.status === 200 && (response.data.loggedUser === "undefined")) {
-        changeLoggedStatue(false);
-        changeLoggedUser(null);
+        context.setLoggedStatus(false);
+        context.setLoggedUser(null);
         navigate('/user/login');
       }
     } catch (error) {
@@ -28,18 +30,18 @@ const Header = ({ LoggedStatus, LoggedUser, changeLoggedStatue, changeLoggedUser
   }
 
   return (
-    <Navbar bg="light" variant="light" expand="lg" className="fixed-top">
+    <Navbar collapseOnSelect bg="light" variant="light" expand="lg" className="fixed-top" style={{zIndex:"99999"}}>
       <Container>
         <Navbar.Brand as = {Link} to = '/' className="fw-bold fs-3 text-primary">Skill Ascent</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto fw-bold">
-            <Nav.Link as={Link} to="/">Home</Nav.Link>
-            <Nav.Link as={Link} to="/courses">Courses</Nav.Link>
-            <Nav.Link as={Link} to="/about">About Us</Nav.Link>
-            <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
+            <Nav.Link eventKey="1" as={Link} to="/">Home</Nav.Link>
+            <Nav.Link eventKey="2" as={Link} to="/courses">Courses</Nav.Link>
+            <Nav.Link eventKey="3" as={Link} to="/about">About Us</Nav.Link>
+            <Nav.Link eventKey="4" as={Link} to="/contact">Contact Us</Nav.Link>
           </Nav>
-          {LoggedStatus ?
+          {context.loggedStatus ?
             <Nav className="fw-bold">
               <Dropdown>
                 <DropdownButton
@@ -47,8 +49,7 @@ const Header = ({ LoggedStatus, LoggedUser, changeLoggedStatue, changeLoggedUser
                   className=" border border-0"
                   drop={`down-centered`}
                   variant="transparent"
-                  title={LoggedUser && <span className="fs-4"> <FaUserCircle /> <span className="fw-bold fs-6">{LoggedUser.slice(0, LoggedUser.indexOf(" "))}</span></span>}>
-
+                  title={context.loggedUser && <span className="fs-4"> <FaUserCircle /> <span className="fw-bold fs-6">{context.loggedUser.slice(0, context.loggedUser.indexOf(" "))}</span></span>}>
                   <Dropdown.Item as = {Link} to = "/user/change-password">Change Password</Dropdown.Item>
                   <Dropdown.Item as = {Button} className="bg-transparent" onClick={LogOut}>Logout</Dropdown.Item>
                 </DropdownButton>

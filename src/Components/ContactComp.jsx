@@ -33,8 +33,8 @@ const ContactComp = () => {
 
 
   return (
-    <div className="container-fluid m-0 pt-3 vh-100 d-flex justify-content-center align-items-center" style={{backgroundColor:"#bbe4e9"}}>
-      <Form className="border border-0 bg-light p-md-5 p-4 rounded shadow" onSubmit={submitHandler} style={{width:CurrentWidth > 768?"50%":"100%"}}>
+    <div className="container-fluid m-0 py-3 d-flex justify-content-center align-items-center" style={{backgroundColor:"#bbe4e9",minHeight:"100vh"}}>
+      <Form className="border border-0 bg-light p-md-5 p-4 rounded" onSubmit={submitHandler} style={{width:CurrentWidth > 768?"50%":"100%"}}>
         <div className="text-center">
           <span className="fs-2 fw-bold">Contact Us</span>
         </div>

@@ -1,18 +1,26 @@
-import { React, useState, useEffect } from 'react'
-import { Link, useParams, Outlet } from 'react-router-dom'
+import { React, useState, useEffect, useContext } from 'react'
+import { Link, useParams, Outlet, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import ListGroup from 'react-bootstrap/ListGroup'
-// import Sidebar from '../Components/Sidebar'
+import Spinner from 'react-bootstrap/Spinner';
 import BaseUrl from '../helper/urlHelper'
+import AuthContext from '../context/AuthContex'
 
-const Learn = ({ changeLoggedStatue, changeLoggedUser }) => {
+const Learn = () => {
+  const navigate = useNavigate();
+  const context = useContext(AuthContext);
+  const [CurrentWidth, setCurrentWidth] = useState(window.innerWidth);
 
-  const [CurrentWidth,setCurrentWidth] = useState(window.innerWidth);
-  const resizeHandler = ()=>{
-    setCurrentWidth(window.innerWidth);
-    setIsOpen(true);
+  const resizeHandler = () => {
+    setCurrentWidth(prevalue => window.innerWidth);
+    if (window.innerWidth < 768) {
+      setIsOpen(false);
+    } else {
+      setIsOpen(true);
+    }
   }
-  window.addEventListener('resize',resizeHandler);
+  window.addEventListener('resize', resizeHandler);
+
   const [isOpen, setIsOpen] = useState(true);
   const params = useParams();
   const openHandler = () => {
@@ -21,60 +29,96 @@ const Learn = ({ changeLoggedStatue, changeLoggedUser }) => {
 
   const [topics, setTopics] = useState([]);
   const [content, setContent] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
+    if (CurrentWidth < 768) {
+      setIsOpen(false);
+    } else {
+      setIsOpen(true);
+    }
+
     const getContents = async () => {
       try {
         const response = await axios.get(`${BaseUrl}/learn/${params.courseName}`);
         if (response.status === 200 && (response.data.loggedUser !== "undefined")) {
-          changeLoggedStatue(true);
-          changeLoggedUser(response.data.loggedUser);
+          context.setLoggedStatus(true);
+          context.setLoggedUser(response.data.loggedUser);
         } else {
-          changeLoggedStatue(false);
+          context.setLoggedStatus(false);
         }
-
         if (response.data.contents === undefined) {
-          console.log("content not found");
+          alert("Course not found!");
+          navigate('/courses');
         } else {
           const topics = response.data.contents.map((item) => {
             return { topic: item.topic, slug: item.slug }
           });
           setTopics([...topics]);
           setContent(response.data.description);
+          setIsLoaded(true);
         }
       } catch (error) {
         console.log(error);
       }
+      setIsLoaded(true);
     }
     getContents();
-  }, [CurrentWidth, changeLoggedStatue, changeLoggedUser, params.courseName]);
+    window.scrollTo(0, 0);
+    // eslint-disable-next-line
+  }, []);
 
+  const sideBarHandelerOnClick = ()=>{
+    if(CurrentWidth < 768){
+      setIsOpen(false);
+    }else{
+      setIsOpen(true);
+    }
+  }
 
   return (
-    <div className="p-0 mx-0  d-flex w-100" style={{ backgroundColor: "#f8f1ff" }} >
-      {CurrentWidth < 786 &&
-        <Link onClick={openHandler} ><div className="container-fluid bg-danger fixed-bottom py-2  text-light text-center">click me</div></Link>
+    <div className="p-0 mx-0  d-flex" style={{ backgroundColor: "#f8f1ff",}}>
+      {CurrentWidth < 768 &&
+        <Link onClick={openHandler} ><div className="container-fluid bg-light fixed-bottom py-2 text-dark text-center" style={{zIndex:"99999"}}>Topics</div></Link>
       }
-      <div className="sidebar pt-5 mt-4 mt-md-5  ps-2 ps-md-2" style={{ backgroundColor: "#fffaf2", marginLeft: isOpen ? "0px" : "-400px" }}>
-        <ListGroup className="my-md-0 my-5" >
-          {topics.length > 0 &&
+
+      <div className={CurrentWidth < 768?"fixed-top vh-100 mt-md-5 mt-2 bg-light":" vh-100 sticky-top"} style={{ backgroundColor: "#fffaf2", width:"19rem", marginLeft: isOpen ? "0px" : "-19rem", overflowY:"auto", top:CurrentWidth >= 768 &&"4rem",}} >
+        <ListGroup className="my-md-0 mt-5 py-4" >
+          {isLoaded ?
+            topics.length > 0 &&
             topics.map((item, index) => {
               return (
-                <ListGroup.Item as={Link} to={`${item.slug}`} key={index} className="bg-transparent border-0 py-0">
+                <ListGroup.Item as={Link} to={`${item.slug}`} key={index} onClick={sideBarHandelerOnClick} className="bg-transparent border-0 py-0">
                   {item.topic}
                 </ListGroup.Item>
               )
             })
+            :
+            <>
+              <div className="d-flex flex-column mt-5 justify-content-center align-items-center">
+                  <Spinner animation="border" variant="primary" />
+                </div>
+            </>
           }
         </ListGroup>
       </div>
 
-      <div className="main-cotainer" style={{ width: CurrentWidth > 768 ? CurrentWidth - 320 : "100%", padding: "10px 0", msOverflowY: isOpen ? 'hidden' : 'sroll' }}>
-        <div className="px-3 my-md-5 py-5">
+      <div className="" style={{width:"100%"}}>
+        <div className="my-md-5 py-5">
           {params.topicName ?
             <Outlet />
             :
-            <div className="">
-              {content}
+            <div className="pt-5" style={{minHeight:"100vh"}}>
+              {isLoaded ?
+                <div className="text-center pt-5">
+                  {content}
+                </div>
+                :
+                <div className="d-flex flex-column mt-5 justify-content-center align-items-center">
+                  <Spinner animation="border" variant="primary" />
+                  <p className="fw-bold fs-5">Please wait...</p>
+                </div>
+              }
             </div>
           }
         </div>

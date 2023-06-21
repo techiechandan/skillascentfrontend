@@ -53,7 +53,10 @@ const ResetPassword = () => {
       }
     }
     auth();
-  }, [navigate])
+    window.scrollTo(0,0);
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <div className="container-fluid m-0 pt-3 vh-100 d-flex justify-content-center align-items-center">
       {!isLoaded ?

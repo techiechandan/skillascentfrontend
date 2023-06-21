@@ -36,30 +36,27 @@ const Dashboard = () => {
 
   return (
     <>
-      {!isLoaded ?
-        <div className="d-flex justify-content-center flex-column align-items-center pt-5">
-          <Spinner animation="border" variant="primary" />
-          <p className="fw-bold fs-5">Please wait...</p>
-        </div>
-        :
+      {isLoaded ?
         <div className="d-flex p-0">
           <Sidebar openState={openState} setOpenState={setOpenState} />
-          <div className="container-fluid m-0 px-0 " style={{ backgroundColor: '#ececec' }}>
-            <div className="container-fluid d-flex py-2 align-items-center">
+          <div className="container-fluid m-0 px-0 " style={{ backgroundColor: '#ececec',width:"100%" }}>
+            <div className="container-fluid d-flex py-2 align-items-center sticky-top bg-light">
               <Button className="p-2 pt-0 me-2 fs-4 bg-transparent text-danger border-0 " onClick={() => { setOpenState(!openState) }}>
                 <FaAlignJustify />
               </Button>
               <h5 className="me-auto">Dashboard!</h5>
-              <div className="">
-                
-              </div>
             </div>
-            <div className=" p-4 pt-0">
+            <div className=" p-0 py-3">
               <div className="text-center">
                 <span className="fs-3 fw-bold">Welcome to Skill Ascent Adminstration..!</span>
               </div>
             </div>
           </div>
+        </div>
+        :
+        <div className="d-flex justify-content-center flex-column align-items-center  pt-5">
+          <Spinner animation="border" variant="primary" />
+          <p className="fw-bold fs-5">Please wait...</p>
         </div>
       }
     </>

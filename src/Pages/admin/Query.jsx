@@ -13,7 +13,6 @@ import BaseUrl from '../../helper/urlHelper'
 import axios from 'axios';
 
 
-
 const Query = () => {
     const navigate = useNavigate();
     const [openState, setOpenState] = useState(true);
@@ -64,14 +63,14 @@ const Query = () => {
         }
     }
 
-    const deleteQuery = async(queryId)=>{
-        try{
+    const deleteQuery = async (queryId) => {
+        try {
             const response = await axios.delete(`${BaseUrl}/admin/query/delete/${queryId}`);
-            if(response.status === 200){
+            if (response.status === 200) {
                 alert(response.data.message);
                 setQueries([...response.data.newQueryList]);
             }
-        }catch(error){
+        } catch (error) {
             alert(error.response.data.message);
         }
     }
@@ -84,11 +83,9 @@ const Query = () => {
                 const response = await axios.get(`${BaseUrl}/admin/queries/api`);
                 if (response.status === 200 && (response.data.queries !== "undefined")) {
                     setQueries([...response.data.queries]);
-                } else {
-                    setQueries(null);
+                    setIsLoaded(true);
                 }
             } catch (error) {
-                setQueries(null);
                 if (error.response.status === 401) {
                     navigate('/admin');
                 }
@@ -102,8 +99,8 @@ const Query = () => {
         <>
             <div className="d-flex p-0">
                 <Sidebar openState={openState} setOpenState={setOpenState} />
-                <div className="container-fluid m-0 px-0 " style={{ backgroundColor: '#ececec' }}>
-                    <div className="container-fluid d-flex py-2 align-items-center">
+                <div className="container-fluid m-0 px-0 " style={{ backgroundColor: '#ececec', width: "100%" }}>
+                    <div className="container-fluid d-flex py-2 align-items-center sticky-top bg-light">
                         <Button className="p-2 pt-0 me-2 fs-4 bg-transparent text-danger border-0 " onClick={() => { setOpenState(!openState) }}>
                             <FaAlignJustify />
                         </Button>
@@ -111,34 +108,47 @@ const Query = () => {
                         {/* <div className=""></div> */}
                     </div>
                     {/* main-container */}
-                    <div className=" p-4 pt-0">
+                    <div className=" p-4 pt-0 my-3">
                         <div className="row justify-content-center align-items-center">
-                            {queries &&
-                                queries.map((item, index) => {
-                                    return (
-                                        <div className="col-md-10 col-12 bg-danger shadow px-0 pt-2 my-2 rounded" key={index}>
-                                            <div className="bg-light p-4 m-0">
-                                                <div className="">
-                                                    <span className="fw-bold me-2">Name:</span>
-                                                    <span>{item.name}</span>
+                            {queries ?
+                                <>
+                                    {isLoaded ?
+                                        queries.map((item, index) => {
+                                            return (
+                                                <div className="col-md-10 col-12 bg-danger shadow px-0 pt-2 my-2 rounded" key={index}>
+                                                    <div className="bg-light p-4 m-0">
+                                                        <div className="">
+                                                            <span className="fw-bold me-2">Name:</span>
+                                                            <span>{item.name}</span>
+                                                        </div>
+                                                        <div className="">
+                                                            <span className="fw-bold me-2">Email:</span>
+                                                            <span>{item.email}</span>
+                                                        </div>
+                                                        <div className="">
+                                                            <div className="fw-bold">Message:</div>
+                                                            <div>{item.query}</div>
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <Button variant="success" className="my-2 me-md-2 mx-1" onClick={() => { setModalShow(true); setDetails(item._id, item.email, item.name) }}>Reply</Button>
+                                                            <Button variant="primary" className="me-md-2 mx-1" onClick={() => { setShowReplies(true); getReplies(item._id, item.email, item.name, item.query) }} >View</Button>
+                                                            <Button variant="danger" className="me-md-2 mx-1" onClick={() => { deleteQuery(item._id) }}>Delete</Button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="">
-                                                    <span className="fw-bold me-2">Email:</span>
-                                                    <span>{item.email}</span>
-                                                </div>
-                                                <div className="">
-                                                    <div className="fw-bold">Message:</div>
-                                                    <div>{item.query}</div>
-                                                </div>
-                                                <div className="text-center">
-                                                    <Button variant="success" className="my-2 me-md-2 mx-1" onClick={() => { setModalShow(true); setDetails(item._id, item.email, item.name) }}>Reply</Button>
-                                                    <Button variant="primary" className="me-md-2 mx-1" onClick={() => { setShowReplies(true); getReplies(item._id, item.email, item.name, item.query) }} >View</Button>
-                                                    <Button variant="danger" className="me-md-2 mx-1" onClick = {()=>{deleteQuery(item._id)}}>Delete</Button>
-                                                </div>
-                                            </div>
+                                            )
+                                        })
+                                        :
+                                        <div className="d-flex flex-column pt-5 justify-content-center align-items-center">
+                                            <Spinner animation="border" variant="primary" />
+                                            <p className="fw-bold fs-5">Please wait...</p>
                                         </div>
-                                    )
-                                })
+                                    }
+                                </>
+                                :
+                                <div className="container text-center">
+                                    <h5 className="">Queries not found!</h5>
+                                </div>
                             }
                         </div>
                         {/* Modal */}
@@ -214,7 +224,7 @@ const Query = () => {
                                                 </div>
                                             </div>
                                             {
-                                                replies.map((item,index)=>(
+                                                replies.map((item, index) => (
                                                     <div className="shadow rounded bg-primary ps-2 p-0 m-0 mb-2" key={index}>
                                                         <div className="bg-light p-md-4 p-2">
                                                             <span>Replied By: </span>
