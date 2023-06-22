@@ -193,10 +193,10 @@ const CourseList = () => {
                                                         <td className="text-center">{item._id}</td>
                                                         <td className="text-center">{item.title}</td>
                                                         <td className="text-center">{item.islive ? "Public" : "Private"}</td>
-                                                        <td className="text-center">{item.description}</td>
+                                                        <td className="text-center">{item.description.slice(0, 70)}...</td>
                                                         <td className="text-center">
-                                                            <Button variant="success me-md-2 mb-md-0 mb-1" onClick={() => { editCourse(item._id) }} >Edit</Button>
-                                                            <Button variant="danger" onClick={() => { deleteCourse(item._id) }} >Delete</Button>
+                                                            <Button variant="success me-md-2 mb-md-0 my-1" onClick={() => { editCourse(item._id) }} >Edit</Button>
+                                                            <Button variant="danger mb-md-0 my-1" onClick={() => { deleteCourse(item._id) }} >Delete</Button>
                                                         </td>
                                                     </tr>
                                                 ))

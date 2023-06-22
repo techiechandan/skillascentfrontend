@@ -58,7 +58,6 @@ const Register = ({changeLoggedStatue}) => {
       }
     } catch (error) {
       setMessageStack(error.response.data.message);
-      console.log(error.message);
     }
   }
 
@@ -66,8 +65,8 @@ const Register = ({changeLoggedStatue}) => {
     setStateList(State.getStatesOfCountry("IN"));
     const auth = async()=>{
       try {
-        const response = await axios.get(`BaseUrl/user/auth/api`);
-        if(response.status === 200){
+        const response = await axios.get(`${BaseUrl}/user/register/api`);
+        if(response.status === 200 && response.data.loggedUser !== "undefined"){
           context.setLoggedStatus(true);
           navigate('/');
         }
