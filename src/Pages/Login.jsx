@@ -81,7 +81,7 @@ const Login = () => {
           <Form.Control type="password" placeholder="Password" value={password} onChange={(event) => { setPassword(event.target.value) }} />
         </Form.Group>
         <div className="text-center">
-          <Button className="text-center" variant="danger" type="submit">Submit</Button>
+          <Button className="text-center" variant="primary" type="submit">Submit</Button>
         </div>
         <hr className=""></hr>
         <div className="text-center my-2">

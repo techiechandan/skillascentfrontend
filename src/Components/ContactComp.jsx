@@ -59,7 +59,7 @@ const ContactComp = () => {
           <Form.Control as="textarea" rows={4} placeholder="Type here..." value = {query} onChange = {(event)=>{setQuery(event.target.value)}} />
         </Form.Group>
         <div className="text-center">
-          <Button className="text-center" variant="danger" type="submit">Submit</Button>
+          <Button className="text-center" variant="primary" type="submit">Submit</Button>
         </div>
       </Form>
     </div>

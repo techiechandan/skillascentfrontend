@@ -171,7 +171,7 @@ const Register = ({changeLoggedStatue}) => {
           <Form.Check type="checkbox" label="I agree to terms and conditions" onChange={() => { setCheckStatus(!checkStatus) }} />
         </Form.Group>
         <div className="text-center">
-          <Button className={checkStatus ? "text-center" : "text-center disabled"} variant="danger" type="submit">Submit</Button>
+          <Button className={checkStatus ? "text-center" : "text-center disabled"} variant="primary" type="submit">Submit</Button>
         </div>
         <hr className=""></hr>
         <div className="text-center my-2">

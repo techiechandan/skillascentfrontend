@@ -50,14 +50,14 @@ const Header = () => {
                   drop={`down-centered`}
                   variant="transparent"
                   title={context.loggedUser && <span className="fs-4"> <FaUserCircle /> <span className="fw-bold fs-6">{context.loggedUser.slice(0, context.loggedUser.indexOf(" "))}</span></span>}>
-                  <Dropdown.Item as = {Link} to = "/user/change-password">Change Password</Dropdown.Item>
-                  <Dropdown.Item as = {Button} className="bg-transparent" onClick={LogOut}>Logout</Dropdown.Item>
+                  <Dropdown.Item eventKey="5" as = {Link} to = "/user/change-password">Change Password</Dropdown.Item>
+                  <Dropdown.Item eventKey="6" as = {Button} className="bg-transparent" onClick={LogOut}>Logout</Dropdown.Item>
                 </DropdownButton>
               </Dropdown>
             </Nav> :
             <Nav className="fw-bold">
-              <Nav.Link as={Link} to="/user/register" className="btn btn-danger mx-md-2 mb-2 mb-lg-0 text-light" >Register</Nav.Link>
-              <Nav.Link as={Link} to="/user/login" className="btn btn-success mx-md-2 mb-2 mb-lg-0 text-light" >Login</Nav.Link>
+              <Nav.Link eventKey="7" as={Link} to="/user/register" className="btn btn-primary mx-md-2 mb-2 mb-lg-0 text-light" >Register</Nav.Link>
+              <Nav.Link eventKey="8" as={Link} to="/user/login" className="btn btn-success mx-md-2 mb-2 mb-lg-0 text-light" >Login</Nav.Link>
             </Nav>
           }
         </Navbar.Collapse>

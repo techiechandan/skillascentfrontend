@@ -31,37 +31,41 @@ const Learn = () => {
   const [content, setContent] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
+
+
+  const getContents = async () => {
+    try {
+      const response = await axios.get(`${BaseUrl}/learn/${params.courseName}`);
+      if (response.status === 200 && (response.data.loggedUser !== "undefined")) {
+        context.setLoggedStatus(true);
+        context.setLoggedUser(response.data.loggedUser);
+      } else {
+        context.setLoggedStatus(false);
+      }
+      if (response.data.contents === undefined) {
+        alert("Course not found!");
+        navigate('/courses');
+      } else {
+        const topics = response.data.contents.map((item) => {
+          return { topic: item.topic, slug: item.slug }
+        });
+        
+        setTopics([...topics]);
+        setContent(response.data.description);
+        setIsLoaded(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
   useEffect(() => {
     if (CurrentWidth < 768) {
       setIsOpen(false);
     } else {
       setIsOpen(true);
-    }
-
-    const getContents = async () => {
-      try {
-        const response = await axios.get(`${BaseUrl}/learn/${params.courseName}`);
-        if (response.status === 200 && (response.data.loggedUser !== "undefined")) {
-          context.setLoggedStatus(true);
-          context.setLoggedUser(response.data.loggedUser);
-        } else {
-          context.setLoggedStatus(false);
-        }
-        if (response.data.contents === undefined) {
-          alert("Course not found!");
-          navigate('/courses');
-        } else {
-          const topics = response.data.contents.map((item) => {
-            return { topic: item.topic, slug: item.slug }
-          });
-          setTopics([...topics]);
-          setContent(response.data.description);
-          setIsLoaded(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-      setIsLoaded(true);
     }
     getContents();
     window.scrollTo(0, 0);
@@ -76,14 +80,15 @@ const Learn = () => {
     }
   }
 
+
   return (
     <div className="p-0 mx-0  d-flex" style={{ backgroundColor: "#f8f1ff",}}>
       {CurrentWidth < 768 &&
         <Link onClick={openHandler} ><div className="container-fluid bg-light fixed-bottom py-2 text-dark text-center" style={{zIndex:"99999"}}>Topics</div></Link>
       }
 
-      <div className={CurrentWidth < 768?"fixed-top vh-100 mt-md-5 mt-2 bg-light":" vh-100 sticky-top"} style={{ backgroundColor: "#fffaf2", width:"19rem", marginLeft: isOpen ? "0px" : "-19rem", overflowY:"auto", top:CurrentWidth >= 768 &&"4rem",}} >
-        <ListGroup className="my-md-0 mt-5 py-4" >
+      <div className={CurrentWidth < 768?"fixed-top vh-100 mt-md-5 bg-light":" vh-100 sticky-top"} style={{ backgroundColor: "#fffaf2", width:"19rem", marginLeft: isOpen ? "0px" : "-19rem", overflowY:"auto",}} >
+        <ListGroup className="mt-md-5 mt-5 py-4" >
           {isLoaded ?
             topics.length > 0 &&
             topics.map((item, index) => {
@@ -97,7 +102,7 @@ const Learn = () => {
             <>
               <div className="d-flex flex-column mt-5 justify-content-center align-items-center">
                   <Spinner animation="border" variant="primary" />
-                </div>
+              </div>
             </>
           }
         </ListGroup>

@@ -42,7 +42,7 @@ const Home = () => {
           <div className="col-12 col-md-5 order-md-1 order-2 homepage-text py-md-5 py-0">
             <span className="fs-1 fw-bolder text-primary py-4">Skill Ascent!</span>
             <span className="fs-5 fs-md-2 fw-bolder text-center">"Start learning today,for better tomorrow!"</span>
-            <Button className="btn btn-danger my-5 fw-bolder" as={Link} to="/courses">Start learning</Button>
+            <Button className="btn btn-primary my-5 fw-bolder" as={Link} to="/courses">Start learning</Button>
           </div>
 
           <div className="col-12 order-1 order-md-2 col-md-6 py-md-5 pt-5 ">
@@ -56,7 +56,7 @@ const Home = () => {
           <Courses />
         </div>
         <div className="text-center mt-auto my-5">
-          <Button as={Link} to={`/courses`} className="btn btn-danger text-center">Learn more</Button>
+          <Button as={Link} to={`/courses`} className="btn btn-primary text-center">Learn more</Button>
         </div>
       </div>
       <Contact />
